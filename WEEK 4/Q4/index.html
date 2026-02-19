@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather Dashboard</title>
+</head>
+<body>
+    <input type="text" id="cityInput" placeholder="Enter city name...">
+    <button onclick="getWeather()">Get Weather</button>
+    <br>
+    
+    <div id="spinner" style="display:none; margin-top:10px;">Loading weather data...</div>
+    <div id="weatherDashboard" style="margin-top:20px;"></div>
+
+    <script>
+        // Cache last searched city result in JavaScript variable [cite: 75]
+        let lastSearchedWeather = null; 
+        const API_KEY = 'YOUR_OPENWEATHER_API_KEY'; // Replace with actual key
+
+        async function getWeather() {
+            const city = document.getElementById('cityInput').value.trim();
+            const dash = document.getElementById('weatherDashboard');
+            const spinner = document.getElementById('spinner');
+            
+            if (!city) return;
+
+            spinner.style.display = 'block';
+            dash.innerHTML = '';
+
+            try {
+                // Send GET request with query parameters 
+                const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`;
+                const res = await fetch(url);
+                
+                if (!res.ok) throw new Error("City not found or Network Error");
+                
+                // Parse JSON response [cite: 67]
+                const data = await res.json();
+                lastSearchedWeather = data; 
+                
+                spinner.style.display = 'none';
+                
+                // Update UI dynamically without page reload [cite: 74]
+                // Display Temperature, Humidity, Weather condition [cite: 68, 69, 70]
+                dash.innerHTML = `
+                    <h3>Weather in ${data.name}</h3>
+                    <p><strong>Temperature:</strong> ${data.main.temp} °C</p>
+                    <p><strong>Humidity:</strong> ${data.main.humidity}%</p>
+                    <p><strong>Condition:</strong> ${data.weather[0].description}</p>
+                `;
+            } catch (error) {
+                spinner.style.display = 'none';
+                // Error handling (invalid city, network error) [cite: 72]
+                dash.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

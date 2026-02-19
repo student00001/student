@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Management</title>
+    <style>table, th, td { border: 1px solid black; border-collapse: collapse; padding: 10px; }</style>
+</head>
+<body>
+    <h2>Employee Management System</h2>
+    <div id="form">
+        <input type="text" id="empId" placeholder="ID">
+        <input type="text" id="empName" placeholder="Name">
+        <input type="text" id="empDept" placeholder="Department">
+        <input type="number" id="empSalary" placeholder="Salary">
+        <button onclick="addEmployee()">Add Employee</button>
+    </div>
+    <br>
+    <table id="empTable">
+        <thead>
+            <tr><th>ID</th><th>Name</th><th>Department</th><th>Salary</th><th>Actions</th></tr>
+        </thead>
+        <tbody id="empBody"></tbody>
+    </table>
+
+    <script src="script.js"></script>
+</body>
+</html>

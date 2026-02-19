@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Management</title>
+</head>
+<body>
+    <form id="studentForm">
+        <input type="text" id="studentId" placeholder="ID (leave blank to create)" readonly>
+        <input type="text" id="name" placeholder="Name" required>
+        <input type="text" id="dept" placeholder="Department" required>
+        <input type="number" id="marks" placeholder="Marks" required>
+        <button type="submit">Save Student</button>
+    </form>
+    
+    <div id="message"></div>
+    
+    <table border="1" id="studentTable" style="margin-top:20px; width:100%;">
+        <thead><tr><th>ID</th><th>Name</th><th>Dept</th><th>Marks</th><th>Actions</th></tr></thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        const API_URL = 'http://localhost:3000/students';
+        const tbody = document.querySelector('#studentTable tbody');
+        const msg = document.getElementById('message');
+        const form = document.getElementById('studentForm');
+
+        function showMessage(text, isError = false) {
+            msg.textContent = text; // Display success and error messages [cite: 58]
+            msg.style.color = isError ? 'red' : 'green';
+            setTimeout(() => msg.textContent = '', 3000);
+        }
+
+        async function fetchStudents() {
+            try {
+                // Fetch API [cite: 55]
+                const res = await fetch(API_URL);
+                handleStatus(res.status); // Handle HTTP status codes properly (200, 404, 500) [cite: 59]
+                const students = await res.json();
+                
+                // Dynamically update table [cite: 57]
+                tbody.innerHTML = students.map(s => 
+                    `<tr>
+                        <td>${s.id}</td><td>${s.name}</td><td>${s.dept}</td><td>${s.marks}</td>
+                        <td>
+                            <button onclick="editStudent('${s.id}', '${s.name}', '${s.dept}', ${s.marks})">Edit</button>
+                            <button onclick="deleteStudent('${s.id}')">Delete</button>
+                        </td>
+                    </tr>`
+                ).join('');
+            } catch (err) { showMessage("Error fetching data", true); }
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('studentId').value;
+            const student = {
+                name: document.getElementById('name').value,
+                dept: document.getElementById('dept').value,
+                marks: document.getElementById('marks').value
+            };
+            
+            const method = id ? 'PUT' : 'POST'; // Update -> Modify or Create -> Add [cite: 50, 52]
+            const url = id ? `${API_URL}/${id}` : API_URL;
+
+            try {
+                const res = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' }, // JSON format for request/response [cite: 56]
+                    body: JSON.stringify(student)
+                });
+                handleStatus(res.status);
+                showMessage(id ? "Student Updated!" : "Student Created!");
+                form.reset();
+                document.getElementById('studentId').value = '';
+                fetchStudents(); // Dynamically update table after each operation [cite: 57]
+            } catch (err) { showMessage("Operation failed", true); }
+        });
+
+        async function deleteStudent(id) {
+            try {
+                const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' }); // Delete -> Remove student record [cite: 53]
+                handleStatus(res.status);
+                showMessage("Student Deleted!");
+                fetchStudents();
+            } catch (err) { showMessage("Failed to delete", true); }
+        }
+
+        function editStudent(id, name, dept, marks) {
+            document.getElementById('studentId').value = id;
+            document.getElementById('name').value = name;
+            document.getElementById('dept').value = dept;
+            document.getElementById('marks').value = marks;
+        }
+
+        function handleStatus(code) {
+            if (code === 404) throw new Error("Not Found");
+            if (code === 500) throw new Error("Server Error");
+        }
+
+        fetchStudents();
+    </script>
+</body>
+</html>

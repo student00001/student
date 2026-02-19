@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Library Tracker</title>
+    <style>
+        .available { color: green; }
+        .checked-out { color: red; }
+    </style>
+</head>
+<body>
+    <h2>Library Book Tracker</h2>
+    <input type="text" id="bId" placeholder="Book ID">
+    <input type="text" id="bTitle" placeholder="Title">
+    <input type="text" id="bAuthor" placeholder="Author">
+    <select id="bStatus">
+        <option value="Available">Available</option>
+        <option value="Checked Out">Checked Out</option>
+    </select>
+    <button onclick="addBook()">Add Book</button>
+
+    <table border="1" style="margin-top: 20px; width: 100%;">
+        <thead>
+            <tr><th>ID</th><th>Title</th><th>Author</th><th>Status</th><th>Actions</th></tr>
+        </thead>
+        <tbody id="bookTableBody"></tbody>
+    </table>
+
+    <script src="library.js"></script>
+</body>
+</html>

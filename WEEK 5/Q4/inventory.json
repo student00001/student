@@ -1,0 +1,16 @@
+[
+  {
+    "id": "P01",
+    "name": "Laptop",
+    "category": "Electronics",
+    "price": 800,
+    "stock": 5
+  },
+  {
+    "id": "P02",
+    "name": "Desk Chair",
+    "category": "Furniture",
+    "price": 150,
+    "stock": 2
+  }
+]

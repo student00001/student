@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Username Checker</title>
+</head>
+<body>
+    <form id="regForm">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username">
+        <span id="loading" style="display:none;">Loading...</span>
+        <span id="feedback"></span>
+        <br><br>
+        <button type="submit">Register</button>
+    </form>
+
+    <script>
+        const usernameInput = document.getElementById('username');
+        const feedback = document.getElementById('feedback');
+        const loading = document.getElementById('loading');
+        const form = document.getElementById('regForm');
+        let isAvailable = false;
+
+        usernameInput.addEventListener('input', async (e) => {
+            const val = e.target.value.trim();
+            if (!val) { feedback.textContent = ''; return; }
+            
+            // Show loading indicator while request is in progress [cite: 21]
+            loading.style.display = 'inline';
+            feedback.textContent = '';
+
+            try {
+                const response = await fetch('users.json');
+                const data = await response.json();
+                
+                loading.style.display = 'none';
+                
+                // Display validation feedback dynamically using DOM manipulation [cite: 19]
+                if (data.includes(val)) {
+                    feedback.textContent = "Username already taken"; // If username exists [cite: 17]
+                    feedback.style.color = "red";
+                    isAvailable = false;
+                } else {
+                    feedback.textContent = "Username available"; // If available [cite: 18]
+                    feedback.style.color = "green";
+                    isAvailable = true;
+                }
+            } catch (err) {
+                loading.style.display = 'none';
+                feedback.textContent = "Error checking username.";
+            }
+        });
+
+        // Prevent form submission if username is unavailable [cite: 20]
+        form.addEventListener('submit', (e) => {
+            if (!isAvailable) {
+                e.preventDefault();
+                alert('Please choose an available username before submitting.');
+            }
+        });
+    </script>
+</body>
+</html>

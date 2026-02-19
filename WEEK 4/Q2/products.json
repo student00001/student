@@ -1,0 +1,5 @@
+[
+    {"name": "Laptop Pro", "price": 1200, "category": "Electronics"},
+    {"name": "Wireless Mouse", "price": 25, "category": "Accessories"},
+    {"name": "Mechanical Keyboard", "price": 80, "category": "Accessories"}
+]

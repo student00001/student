@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Product Inventory</title>
+    <style>
+        .low-stock { background-color: #ffcccc; font-weight: bold; }
+        #totalValue { font-size: 1.2em; color: blue; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h2>Product Inventory System</h2>
+    
+    <div id="controls">
+        <input type="text" id="pSearch" placeholder="Search by category..." onkeyup="searchCategory()">
+        <br><br>
+        <input type="text" id="pId" placeholder="ID">
+        <input type="text" id="pName" placeholder="Name">
+        <input type="text" id="pCat" placeholder="Category">
+        <input type="number" id="pPrice" placeholder="Price">
+        <input type="number" id="pStock" placeholder="Stock">
+        <button onclick="addProduct()">Add Product</button>
+    </div>
+
+    <table border="1" style="width:100%; margin-top:20px;">
+        <thead>
+            <tr><th>ID</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Actions</th></tr>
+        </thead>
+        <tbody id="inventoryBody"></tbody>
+    </table>
+
+    <div id="totalValue"></div>
+
+    <script src="inventory.js"></script>
+</body>
+</html>

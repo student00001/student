@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Search</title>
+</head>
+<body>
+    <input type="text" id="searchInput" placeholder="Search products...">
+    <div id="results"></div>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const resultsDiv = document.getElementById('results');
+        let debounceTimer;
+
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(debounceTimer);
+            const query = e.target.value.toLowerCase();
+            
+            // Debouncing (delay API calls while typing) 
+            debounceTimer = setTimeout(() => fetchProducts(query), 500);
+        });
+
+        async function fetchProducts(query) {
+            if (!query) { resultsDiv.innerHTML = ''; return; }
+
+            try {
+                // Fetch matching results from a local JSON file [cite: 28, 31]
+                const res = await fetch('products.json');
+                if (!res.ok) throw new Error("Network response was not ok");
+                const products = await res.json();
+                
+                const filtered = products.filter(p => p.name.toLowerCase().includes(query));
+                
+                if (filtered.length === 0) {
+                    resultsDiv.innerHTML = '<p>No results found</p>'; // Show "No results found" if response is empty [cite: 39]
+                    return;
+                }
+
+                resultsDiv.innerHTML = filtered.map(p => 
+                    `<div style="border:1px solid #ccc; margin:5px; padding:5px;">
+                        <strong>${p.name}</strong> - $${p.price} <br>
+                        <em>Category: ${p.category}</em>
+                    </div>`
+                ).join('');
+            } catch (error) {
+                // Error handling for failed requests [cite: 38]
+                resultsDiv.innerHTML = `<p style="color:red;">Error fetching data.</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

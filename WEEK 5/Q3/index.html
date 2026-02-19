@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Records</title>
+</head>
+<body>
+    <h2>Student Record System</h2>
+    <input type="text" id="sId" placeholder="ID">
+    <input type="text" id="sName" placeholder="Name">
+    <input type="text" id="sCourse" placeholder="Course">
+    <input type="number" id="sMarks" placeholder="Marks">
+    <button onclick="addStudent()">Add Student</button>
+    <br><br>
+    <table border="1" id="studentTable">
+        <thead>
+            <tr><th>ID</th><th>Name</th><th>Course</th><th>Marks</th><th>Actions</th></tr>
+        </thead>
+        <tbody id="studentBody"></tbody>
+    </table>
+
+    <script src="student_script.js"></script>
+</body>
+</html>
